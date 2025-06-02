@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const morgan = require('morgan');
+const path = require('path');
 
 const app = express();
 
@@ -20,6 +21,14 @@ app.use((req, res, next) => {
 // Middleware
 app.use(express.json());
 app.use(cors());
+
+// Serve static files from the root directory
+app.use(express.static(path.join(__dirname, '..')));
+
+// Add route for the main page
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'index.html'));
+});
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI)
